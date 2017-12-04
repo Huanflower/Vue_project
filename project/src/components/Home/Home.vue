@@ -20,6 +20,7 @@
                 </a>
             </my-li>
         </my-ul>
+
     </div>
 </template>
 <script>
@@ -28,7 +29,7 @@
          this.$axios.get('getlunbo')
          .then(res=>{
              this.imgs = res.data.message;
-         })
+         }) 
      },
      data(){
          return {
@@ -53,6 +54,13 @@
                  title: '联系我们'
              },]
          }
+     },
+     watch:{
+         selected(newslist){
+            this.$router.push({
+                name:newslist,
+            })
+        }
      }
     }
 </script>

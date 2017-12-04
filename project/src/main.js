@@ -14,6 +14,8 @@ import Home from './components/Home/Home.vue';
 import Member from './components/Member/Member.vue';
 import Shopcart from './components/Shopcart/Shopcart.vue';
 import Search from './components/Search/Search.vue';
+import NewsList from './components/News/NewsList.vue';
+import Newsdetail from './components/News/Newsdetail.vue'
 //路由相关组件 结束
 
 //VueRouter 开始
@@ -24,9 +26,11 @@ router.addRoutes([
     //重定向 到首页
     {path: '/',redirect:{name:'home'}},
     {name: 'home',path: '/home',component:Home},
-    { name: 'member', path: '/member', component: Member },
-    { name: 'shopcart', path: '/shopcart', component: Shopcart },
-    { name: 'search', path: '/search', component: Search },
+    {name: 'member', path: '/member', component: Member },
+    {name: 'shopcart', path: '/shopcart', component: Shopcart },
+    {name: 'search', path: '/search', component: Search },
+    { name: 'newslist', path: '/newslist', component: NewsList },
+    { name: 'newsdetail', path: '/newsdetail', component: Newsdetail },
 ]);
 //VueRouter 结束
 

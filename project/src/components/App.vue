@@ -1,7 +1,7 @@
 <template>
    <div>
        <!-- 头 -->
-       <mt-header title="哈喽，你好"></mt-header>
+       <mt-header title="哈喽,初次见面,请多多关照"></mt-header>
        <!-- 中 -->
        <router-view></router-view>
        <!-- 底 -->
