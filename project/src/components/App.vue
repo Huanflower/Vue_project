@@ -3,7 +3,7 @@
        <!-- 头 -->
        <mt-header title="哈喽,初次见面,请多多关照"></mt-header>
        <!-- 中 -->
-       <router-view></router-view>
+       <router-view class="tmpl"></router-view>
        <!-- 底 -->
        <mt-tabbar v-model="selected">
             <mt-tab-item id="home">
@@ -44,5 +44,8 @@ export default {
 </script>
 
 <style scoped>
-
+    .mint-tabbar {
+        position: fixed;
+        bottom:0;
+    }
 </style>

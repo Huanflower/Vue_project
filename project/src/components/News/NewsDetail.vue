@@ -1,62 +1,52 @@
 <template>
-    <div class="newslist">
-      <div class="mint-header">
-          <div class="mint-header-button is-left">
-              <a href="#/" class="router-link-active">
-                <button class="mint-button mint-button--default mint-button--normal">
-                    <span class="mint-button-icon">
-                        <i class="mintui mintui-back"></i>
-                    </span> 
-                </button>
-            </a>
+    <div>
+        <nav-bar title="新闻详情"></nav-bar>
+        <div class="news-title">
+            <p>{{newsInfo.title}}</p>
+            <div>
+                <span>{{newsInfo.click}}次点击</span>
+                <span>分类:民生经济</span>
+                <span>添加时间:{{newsInfo.add_time|convertTime(15)}}</span>
             </div>
-        <h1 class="mint-header-title">新闻详情</h1> 
-        <div class="mint-header-button is-right">
-            <button class="mint-button mint-button--default mint-button--normal">
-                <label class="mint-button-text"></label>
-            </button>
-        </div>  
         </div>
-
-         <div class="news-title">
-            <p v-text="newsInfo.title"></p>
-                <div>
-                    <span>{{newsInfo.click}}次点击</span>
-                    <span>分类：民生经济</span>
-                    <span>添加事件{{newsInfo.add_time}}</span>
-                </div>
-        </div>
+        <div class="news-content" v-html="newsInfo.content">新闻明细</div>
     </div>
 </template>
-
 <script>
-export default {
-  data() {
-    return {
-      newsInfo: {},
-      title:'新闻详情',
-    };
-  },
-  created() {
-      let newsId = this.$route.query.newsId;
-     this.$axios.get('getnew/'+newsId)
-    .then(res => {
-      this.newsInfo = res.data.message[0];
-      console.log(res);
-    });
-  }
-};
+    export default {
+        data(){
+            return {
+                newsInfo: {},//新闻详情
+            }
+        },
+        created(){
+            let newsId = this.$route.query.newsId;
+            this.$axios.get('getnew/'+ newsId)
+            .then(res=>{
+                // console.log(res.data.message[0]);
+                this.newsInfo = res.data.message[0];
+            })
+            .catch(err=>{
+                console.log('新闻详情获取失败',err);
+            })
+        }
+    }
 </script>
-
 <style scoped>
-.mint-header {
-  background-color: #ccc;
+.news-title p {
+    color: #0a87f8;
+    font-size: 20px;
+    font-weight: bold;
 }
-.mintui-back {
-  color: blue;
-  font-weight: bold;
+.news-title span {
+    margin-right: 30px;
 }
-.mint-header-title {
-  color: #000;
+.news-title {
+    margin-top: 5px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+/*主体文章的左右距离*/
+.news-content {
+    padding: 10 5;
 }
 </style>

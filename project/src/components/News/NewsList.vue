@@ -1,34 +1,25 @@
-<template>
-    <div class="newslist">
-      <header class="mint-header">
-          <div class="mint-header-button is-left">
-              <a href="#/" class="router-link-active">
-                <button class="mint-button mint-button--default mint-button--normal">
-                    <span class="mint-button-icon">
-                        <i class="mintui mintui-back"></i>
-                    </span> 
-                </button>
-            </a>
-        </div>
-        <h1 class="mint-header-title">新闻列表</h1> 
-        <div class="mint-header-button is-right">
-            <button class="mint-button mint-button--default mint-button--normal">
-                <label class="mint-button-text"></label>
-            </button>
-        </div>
-    </header>
-
+<template> 
+    <div>
+        <nav-bar title="新闻列表"></nav-bar>
+        <div class="demo">
         <ul>
-            <li v-for="news in newslist" :key="news.id">
-                <router-view class="new.title"></router-view>
-                    <img :src="news.img_url" alt="">
-                    <div class="mint-body">
-                        <span>{{news.title}}</span>
-                        <p class="left">点击率：{{news.click}}</p>
-                        <p class="right">发表时间：{{news.add_time}}</p>
+            <li v-for="news in newsList" :key="news.id">
+                 <router-link :to="{name:'news.detail',query:{newsId:news.id}}">
+                    <img class="" :src="news.img_url">
+                    <div >
+                        <!-- 注意：用过滤器做了个标题字数限制，多余的...显示 -->
+                        <span>{{news.title|convetTitle(13)}}</span>
+                        <div class="news-desc">
+                            <p>点击率：{{news.click}}</p>
+                            <!-- 注意：用过滤器做了个时间设置conver-time -->
+                            <p>发表时间：{{news.add_time|convertTime}}</p>
+                        </div>
                     </div>
-            </li>
-        </ul>
+                    </router-link>
+                </li>
+                <li class="line"></li>
+            </ul>
+        </div>
     </div>
 </template>
 
@@ -36,78 +27,61 @@
 export default {
   data() {
     return {
-      newslist: []
+      newsList: [],//新闻列表数据
     };
   },
   created() {
-    this.$axios.get("getnewslist").then(res => {
-      this.newslist = res.data.message;
-      console.log(res);
-    });
+    this.$axios.get("getnewslist")
+    .then(res => {
+      this.newsList = res.data.message;
+    //   console.log(res);
+    })
+    .catch(err=>{
+        console.log('新闻列表异常',err);
+    })
   }
 };
 </script>
 
 <style scoped>
-.mint-header {
-  background-color: #ccc;
+.demo a {
+    display: block;
+    width: 330px;
+    height: 44px;
+    color: #000;
+    padding: 10px 15px;
 }
-.mintui-back {
-  color: blue;
-  font-weight: bold;
-}
-.mint-header-title {
-  color: #000;
-}
-.newslist {
-    width: 100%;
-    height:90%;
-    overflow: hidden;
-    /* margin-top:40px; */
-}
-ul {
-    padding: 0px 10px;
-}
-li {
-    width: 100%;
-    height:10%;
-    overflow: hidden;
-    border-bottom:1px solid #ccc;
-    margin:10px;
-}
-li img {
-    width: 20%;
-    height:80%;
-}
-.mint-body {
-    margin:0;
-    padding:0;
-    width: 75%;
-    float:right;
-    height: 100%;
-    overflow: hidden;
-}
-.mint-body span{
-    width: 100%;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden; 
-    height:50%;
-}
-.mint-body .left {
+.demo img {
     float: left;
-    width: 27%;
-    height:100%;
-    color: blue;
-    font-weight: bold;
+    width: 42px;
+    height: 42px;
+    margin-right: 20px;
 }
-.mint-body .right {
+.demo a div {
+    float: left;
+    width: 258px;
+}
+.demo span {
+    display: block;
+    width: 100%;
+    font-size: 17px;
+    line-height: 21px;
+    /* 标题一行显示，多余部分隐藏 */
+    /* white-space: space nowrap;
+    overflow:hidden; */
+}
+.demo a p {
+    float: left;
+    color: #0bb0f5;
+    font-size: 14px;
+    line-height: 21px;
+}
+.demo p:nth-child(2) {
     float: right;
-    width: 60%;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    color: blue;
-    font-weight: bold;
+}
+.line {
+    margin-left: 16px;
+    transform: scaleY(.5);
+    border-bottom: 1px solid #c8c7cc;
 }
 </style>

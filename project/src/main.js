@@ -1,11 +1,31 @@
 //引入资源
 import Vue from 'vue';
 
+// 注册全局过滤器开始
+import Moment from 'moment';
+Vue.filter('convertTime', (value) => {
+    return Moment(value).format('YYYY-MM-DD');
+});
+
+// 处理title太长的问题
+Vue.filter('convetTitle', (value, limit) => {
+        if (value.length > limit) {
+            return value.substr(0, limit) + '...'
+        }
+        // 返回原数据
+        return value;
+    })
+    // 注册全局过滤器结束
+
+
+
 // 注册全局组件开始
 import MyLi from './components/commons/MyLi.vue';
 import MyUl from './components/commons/MyUl.vue';
-Vue.component(MyLi.name,MyLi);
+import NavBar from './components/commons/NavBar.vue';
+Vue.component(MyLi.name, MyLi);
 Vue.component(MyUl.name, MyUl);
+Vue.component(NavBar.name, NavBar);
 // 注册全局组件结束
 
 //路由相关组件 开始
@@ -15,7 +35,7 @@ import Member from './components/Member/Member.vue';
 import Shopcart from './components/Shopcart/Shopcart.vue';
 import Search from './components/Search/Search.vue';
 import NewsList from './components/News/NewsList.vue';
-import Newsdetail from './components/News/Newsdetail.vue'
+import NewsDetail from './components/News/NewsDetail.vue'
 //路由相关组件 结束
 
 //VueRouter 开始
@@ -24,13 +44,14 @@ Vue.use(VueRouter);
 let router = new VueRouter();
 router.addRoutes([
     //重定向 到首页
-    {path: '/',redirect:{name:'home'}},
-    {name: 'home',path: '/home',component:Home},
-    {name: 'member', path: '/member', component: Member },
-    {name: 'shopcart', path: '/shopcart', component: Shopcart },
-    {name: 'search', path: '/search', component: Search },
-    { name: 'newslist', path: '/newslist', component: NewsList },
-    { name: 'newsdetail', path: '/newsdetail', component: Newsdetail },
+    { path: '/', redirect: { name: 'home' } },
+
+    { name: 'home', path: '/home', component: Home },
+    { name: 'member', path: '/member', component: Member },
+    { name: 'shopcart', path: '/shopcart', component: Shopcart },
+    { name: 'search', path: '/search', component: Search },
+    { name: 'news.list', path: '/news/list', component: NewsList },
+    { name: 'news.detail', path: '/news/detail', component: NewsDetail },
 ]);
 //VueRouter 结束
 
@@ -55,6 +76,6 @@ Axios.defaults.baseURL = 'http://vue.studyit.io/api/';
 
 new Vue({
     el: '#app',
-    render: c=>c(App),
+    render: c => c(App),
     router
 });

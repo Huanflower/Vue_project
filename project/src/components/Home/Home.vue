@@ -12,12 +12,12 @@
 
         <!-- 九宫格 -->
         <my-ul>
-            <my-li v-for="(router,index) in homeRouters" :key="index">
-                <a href="">
-                    <div :class="'back-img ' + router.className">
-                        {{router.title}}
+            <my-li v-for="(r,index) in homeRouters" :key="index">
+                <router-link :to="r.router">
+                    <div :class="'back-img ' + r.className">
+                        {{r.title}}
                     </div>
-                </a>
+                </router-link>
             </my-li>
         </my-ul>
 
@@ -36,32 +36,31 @@
              imgs: [],
              homeRouters:[{
                  className:'news',
-                 title: '新闻列表'
+                 title: '新闻列表',
+                 router:{name:'news.list'}
              },{
                  className:'pic',
-                 title: '图文分享'
+                 title: '图文分享',
+                  router:{name:'news.list'}
              },{
                  className:'goods',
-                 title: '商品列表'
+                 title: '商品列表',
+                  router:{name:'news.list'}
              },{
                  className:'feedback',
-                 title: '留言反馈'
+                 title: '留言反馈',
+                  router:{name:'news.list'}
              },{
                  className:'search',
-                 title: '搜索咨讯'
+                 title: '搜索咨讯',
+                  router:{name:'news.list'}
              },{
                  className:'callme',
-                 title: '联系我们'
+                 title: '联系我们',
+                  router:{name:'news.list'}
              },]
          }
      },
-     watch:{
-         selected(newslist){
-            this.$router.push({
-                name:newslist,
-            })
-        }
-     }
     }
 </script>
 <style scoped>
