@@ -8,7 +8,7 @@
                     <img class="" :src="news.img_url">
                     <div >
                         <!-- 注意：用过滤器做了个标题字数限制，多余的...显示 -->
-                        <span>{{news.title|convetTitle(13)}}</span>
+                        <span>{{news.title|convetTitle(15)}}</span>
                         <div class="news-desc">
                             <p>点击率：{{news.click}}</p>
                             <!-- 注意：用过滤器做了个时间设置conver-time -->

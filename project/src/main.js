@@ -23,9 +23,13 @@ Vue.filter('convetTitle', (value, limit) => {
 import MyLi from './components/commons/MyLi.vue';
 import MyUl from './components/commons/MyUl.vue';
 import NavBar from './components/commons/NavBar.vue';
+import Comment from './components/commons/Comment.vue';
+import MySwipe from './components/commons/MySwipe.vue';
 Vue.component(MyLi.name, MyLi);
 Vue.component(MyUl.name, MyUl);
 Vue.component(NavBar.name, NavBar);
+Vue.component(Comment.name, Comment);
+Vue.component(MySwipe.name, MySwipe);
 // 注册全局组件结束
 
 //路由相关组件 开始
@@ -35,12 +39,23 @@ import Member from './components/Member/Member.vue';
 import Shopcart from './components/Shopcart/Shopcart.vue';
 import Search from './components/Search/Search.vue';
 import NewsList from './components/News/NewsList.vue';
-import NewsDetail from './components/News/NewsDetail.vue'
+import NewsDetail from './components/News/NewsDetail.vue';
+import PhotoList from './components/Photo/PhotoList.vue';
+import PhotoDetail from './components/Photo/PhotoDetail.vue';
+
+import GoodsList from './components/Goods/GoodsList.vue';
+import GoodsDetail from './components/Goods/GoodsDetail.vue';
 //路由相关组件 结束
 
 //VueRouter 开始
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
+
+//VuePreview开始
+import VuePreview from 'vue-preview';
+Vue.use(VuePreview);
+
+
 let router = new VueRouter();
 router.addRoutes([
     //重定向 到首页
@@ -52,6 +67,11 @@ router.addRoutes([
     { name: 'search', path: '/search', component: Search },
     { name: 'news.list', path: '/news/list', component: NewsList },
     { name: 'news.detail', path: '/news/detail', component: NewsDetail },
+    { name: 'photo.list', path: '/photo/list/:categoryId', component: PhotoList },
+    { name: 'photo.detail', path: '/photo/detail/:imgId', component: PhotoDetail },
+    // { name: 'test', path: '/test', component: Comment },
+    { name: 'goods.list', path: '/goods/list', component: GoodsList },
+    { name: 'goods.detail', path: '/goods/detail/:goodsId', component: GoodsDetail },
 ]);
 //VueRouter 结束
 

@@ -1,15 +1,8 @@
 <template>
     <div>
         
-        <!-- 轮播图 -->
-        <mt-swipe :auto="4000">
-            <mt-swipe-item v-for="(pic,index) in imgs" :key="index">
-                <a :href="pic.url">
-                    <img :src="pic.img">
-                </a>
-            </mt-swipe-item>
-        </mt-swipe>  
-
+        <my-swipe url="getlunbo"></my-swipe>
+       
         <!-- 九宫格 -->
         <my-ul>
             <my-li v-for="(r,index) in homeRouters" :key="index">
@@ -25,12 +18,6 @@
 </template>
 <script>
     export default {
-     created(){
-         this.$axios.get('getlunbo')
-         .then(res=>{
-             this.imgs = res.data.message;
-         }) 
-     },
      data(){
          return {
              imgs: [],
@@ -41,11 +28,11 @@
              },{
                  className:'pic',
                  title: '图文分享',
-                  router:{name:'news.list'}
+                  router:{name:'photo.list',params:{categoryId:0}}
              },{
                  className:'goods',
                  title: '商品列表',
-                  router:{name:'news.list'}
+                  router:{name:'goods.list',query:{page:1}}
              },{
                  className:'feedback',
                  title: '留言反馈',
