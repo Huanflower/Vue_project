@@ -1,12 +1,14 @@
 <template>
-    <div :style="'height:' + height">
-        <nav-bar title="商品详情"></nav-bar>
-        <mt-loadmore :bottom-method="loadBottom" ref="loadmore" :autoFill="isAutoFill" :bottom-all-loaded="allLoaded">
-        <ul>
+<div :style="'height:' + height">
+            <nav-bar title="商品列表"></nav-bar>
+
+    <mt-loadmore :bottom-method="loadBottom" ref="loadmore" :auto-fill="isAutoFill" :bottom-all-loaded="allLoaded">
+        <ul ref="ul">
             <li v-for="goods in goodsList" :key="goods.id">
-                <router-link :to="{name:'goods.detail',params:{goodsId:goods.id}}" >
+            <!-- 1:去哪里 -->
+                <router-link :to="{name:'goods.detail',params:{goodsId:goods.id} }">
                     <img :src="goods.img_url">
-                    <div class="title">{{goods.title|convetTitle(25)}}</div>
+                    <div class="title">{{goods.title|convertTitle(25)}}</div>
                     <div class="desc">
                         <div class="sell">
                             <span>￥{{goods.sell_price}}</span>
@@ -22,85 +24,93 @@
                         </div>
                     </div>
                 </router-link>
-            </li>
+            </li>         
         </ul>
-        </mt-loadmore>
-    </div>
+    </mt-loadmore>
+</div>
 </template>
 <script>
-   export default {
-       props:['appRefs'],//接收app里头和底的高度
-       methods:{
-           //检测状态改变
-           changeStatus(s){
-            //    console.log(s);
-           },
-           //触发上拉事件
-           loadBottom(){
-            //     this.allLoaded = true;
-            //    this.$refs.loadmore.onTopLoaded();
+export default {
+    props:['appRefs'],//接受app里的头和底部
+    methods:{
+        //触发上拉函数
+        loadBottom(){
+            this.$axios.get(`getgoods?pageindex=${this.page}`)
+            .then(res=>{
+                //判断是否还有数据
+                if(res.data.message.length == 0){
+                    this.$toast({
+                      message: '提示:没有更多数据了',
+                      duration: 2000
+                    });
+                    //禁止下拉刷新函数调用
+                    this.allLoaded = true;
+                    // return;  有了他，少了一次通知回到初始状态的过程，少了过程loadding的区域一直存在，把元素向上顶了
+                }
+                //追加下一页的数据
+                this.goodsList = this.goodsList.concat(res.data.message);
+                this.page ++; 
+                //从loading状态通知回到pull初始状态
+                this.$refs.loadmore.onBottomLoaded();
+            })
+            .catch(err=>console.log(err));
 
-                this.$axios.get(`getgoods?pageindex=${this.page}`)
-                .then(res=>{
-                    if(res.data.message.length == 0){
-                        this.$toast({
-                            message:'提示:没有更多数据',
-                            duration:2000
-                        })
-                        this.allLoaded = true;
-                        return;
-                    }
-                    //追加下一页的数据
-                    this.goodsList = this.goodsList.concat(res.data.message);
-                    this.page ++; 
-                    //从loading状态通知回到pull初始状态
-                    this.$refs.loadmore.onBottomLoaded();
-                })
-                .catch(err=>{
-                    console.log(err);
-                })
-            //    console.log('触发事件')
-            //  
-            },
-             changeHeight(){
-                this.height = document.documentElement.clientHeight-this.appRefs.header.$el.offsetHeight-this.appRefs.footer.$el.offsetHeight;
-                // console.log(this.arrRefs.header);
-                //  console.log(this.arrRefs.header.$el.offsetHeight);
-                //console.log(this.arrRefs.footer.$el.offsetHeight)
-            },
+            //this.page -> 5
+            //获取第五页的数据追加，并自增 -> 6
 
+            // this.allLoaded = true; //一次后，禁止该函数的调用
+
+            //发请求获取数据
+            // this.$refs.loadmore.onBottomLoaded();
+            // console.log(this.$refs.loadmore);
+            // console.log(this.$refs.ul);
+            // console.log(this);
         },
-        data() {
-            return {
-            goodsList:'',//商品列表数据
-            isAutoFill:false,
-            allLoaded:false,
-            page:1,
-            height:'',//默认高度不给
-            };
-        },
-        mounted(){
-            this.changeHeight();
-        },
-        created() {
-            //获取路由参数
-            this.page = this.$route.query.page||1;
-            //发送请求
-           this.$axios.get(`getgoods?pageindex=${this.page}`)
-           .then(res=>{
-              
-               this.goodsList = res.data.message;
-                console.log(this.goodsList);
-                this.page ++;
-           }) 
-           .catch(err=>{
-               console.log(err);
-           })
+        changeHeight(){//改变父盒子高度
+            this.height = document.documentElement.clientHeight -
+            this.appRefs.header.$el.offsetHeight;
         }
-};
+    },
+    data(){
+        return {
+            goodsList:[],//商品列表
+            isAutoFill:false,//是否自动检测，并调用loadBottom
+            allLoaded:false,//数据是否全部加载完毕，如果是，禁止函数调用
+            page:1, //页码
+            height:'',//根节点div高度
+        }
+    },
+    //操作DOM
+    mounted(){
+        this.changeHeight();
+    },
+    created(){
+        //获取路由参数
+        this.page = this.$route.query.page||1;
+        //发请求
+        this.$axios.get(`getgoods?pageindex=${this.page}`)
+        .then(res=>{
+            this.goodsList = res.data.message;
+            this.page ++; 
+        })
+        .catch(err=>console.log(err));
+    }
+}
+
+
 </script>
 <style scoped>
 
+.title{
+    overflow:hidden; 
+    text-overflow:ellipsis;
+    display:-webkit-box; 
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2; 
+}
+.mint-loadmore{
+    margin-bottom: 59px;
+}
 ul {
     overflow: hidden;
 }
@@ -108,11 +118,12 @@ li {
     width: 50%;
     float: left;
     padding: 6px;
+    height: 300px;
     box-sizing: border-box;
 }
 
 
-li > a:not(.mui-btn) {
+li > a {
     margin: 0px;
     padding: 0px;
     border: 1px solid #5c5c5c;
@@ -123,7 +134,7 @@ li > a:not(.mui-btn) {
 
 }
 
-li > a:not(.mui-btn) img {
+li > a img {
      width: 100%;
 }
 
