@@ -8,7 +8,7 @@
             <!-- 1:去哪里 -->
                 <router-link :to="{name:'goods.detail',params:{goodsId:goods.id} }">
                     <img :src="goods.img_url">
-                    <div class="title">{{goods.title|convertTitle(25)}}</div>
+                    <div class="title">{{goods.title|convetTitle(25)}}</div>
                     <div class="desc">
                         <div class="sell">
                             <span>￥{{goods.sell_price}}</span>

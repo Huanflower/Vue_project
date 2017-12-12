@@ -1,6 +1,6 @@
 <template>
   <div>
-      查找
+      查找页面
   </div>
 </template>
 <script>

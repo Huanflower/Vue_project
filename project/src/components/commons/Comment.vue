@@ -1,5 +1,5 @@
 <template>
-    <div class="tmpl">
+    <div>
         <div class="photo-bottom">
             <ul>
                 <li class="photo-comment">
@@ -39,8 +39,8 @@ export default {
             comments:[],//评论信息
             page:1,//页码
             hasData:true,//是否还有数据
-            id:88,
-            content:'',
+            id:0,//当前主体id
+            content:'',//评论内容
         }
     },
     methods:{
@@ -109,7 +109,8 @@ export default {
         // .catch(err=>{
         //     console.log(err);
         // })
-
+        //创建组件的时候，接收父组件参数，传递值
+        this.id = this.cid;
         this.page = this.$route.query.pageindex||1;
         //调用loaderFirst函数
         this.loadByPage(this.page);

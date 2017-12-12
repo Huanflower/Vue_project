@@ -66,8 +66,35 @@
                     id:0,title:'全部'
                 });
                 this.imgs = imgRes.data.message;
+                if(this.imgs.length == 0 ){
+                    this.$toast({
+                        message:'提示:没有图片',
+                        duration:5000
+                    })
+                }
             })
             )
+        },
+        beforeRouteUpdate(to,from,next){
+           this.getImgs(to.params.ctegoryId);
+           next(); 
+        },
+        methods:{
+            getImgs(id){
+                this.$axios.get('getimages/'+id)
+                .then(res=>{
+                    this.imgs= res.data.message;
+                    if(this.imgs.length == 0){
+                        this.$toast({
+                            message: '提示：没有图片',
+                            duration: 5000
+                        });
+                    }
+                })
+                .catch(err=>{
+                    console.log(err);
+                })
+            }
         }
     }
     
